@@ -1,0 +1,5 @@
+== Ruby on Rails Website: BlackJack Tutorial
+
+This is a basic website that contains a simple tutorial on making a blackjack app.
+
+UNDER CONSTRUCTION!!

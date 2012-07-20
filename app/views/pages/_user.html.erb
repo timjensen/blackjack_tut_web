@@ -1,0 +1,151 @@
+<h2>Setting Up Our User Model</h2><br>
+<p>
+  Ok so now we are all setup we can start coding. Firstly we are going to create the User model and controller, like I said in the introduction 
+  im going to go through this part quickly as Hartl's tutorial cover this step by step so you should understand what is going on. Lets use scaffolding 
+  to generate our controller and model like so:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span>$ rails generate controller Users new --no-test-framework</span>
+<span>$ rails generate model User </span>
+</pre>
+</div>
+<p>
+  Note that I havn't added any parameters to the model I prefer to do this manually so lets open up migration file (located db/migrate/...), and enter the following:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">class</span> <span class="r">CreateUsers</span> <span><</span> <span class="r">ActiveRecord::Migration</span>
+  <span class="g">def</span> <span class="b">change</span>
+    <span>create_table</span> <span class="r">:users</span> <span class="g">do</span> <span class="b">|t|</span>
+     <span> t.string</span>  <span class="r">:name</span>
+      <span>t.string</span>  <span class="r">:password_digest</span>
+      <span>t.integer</span> <span class="r">:bankroll</span><span>,</span> <span class="r">:default</span> <span>=></span> <span class="gr">"2000"</span>
+      <span>t.string</span>  <span class="r">:remember_token</span>
+      <span>t.timestamps</span>
+    <span class="g">end</span>
+    <span class="g">add_index</span>  <span class="r">:users</span><span>,</span> <span class="r">:remember_token</span>
+  <span class="g">end</span>
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  That sorted we can run the migration to create the database table:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span>$ rake db:migrate</span>
+</pre>
+</div>
+<p>
+  Next we can attack the User model file (located app/models/user.rb). We will add the accessible attributes and validations, edit your user model file to look like this:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">class</span> <span class="r">User</span><span> <</span> <span class="r">ActiveRecord::Base</span>
+  <span class="g">attr_accessible</span> <span class="r">:name</span><span>,</span> <span class="r">:password</span>,</span> <span class="r">:password_confirmation</span>
+  <span>has_secure_password</span>
+  
+  <span>validates</span> <span class="r">:name</span><span>,</span> <span class="r">presence: true</span><span>,</span> <span class="r">length: { maximum: 25 }</span><span>,</span>  
+      <span class="r">uniqueness: { case_sensitive: false }</span>
+  <span>validates</span> <span class="r">:password</span><span>,</span> <span class="r">length: { minimum: 6 }</span>
+  <span>validates</span> <span class="r">:password_confirmation</span><span>,</span> <span class="r">presence: true</span>
+  
+  <span class="g">before_save</span> <span class="r">:create_remember_token</span>
+  
+  <span class="g">private</span>
+
+    <span class="g">def</span> create_remember_token</span>
+      <span class="b">self</span><span>.remember_token</span><span> =</span> <span class="p">SecureRandom</span><span>.urlsafe_base64</span>
+    <span class="g">end</span>
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  With this done we have now setup and migrated our model and defined the model class. This is a simple test
+  that should be passing at this point. I know most of you will just cut and paste it but take your time 
+  to make sure you understand what is happening.
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span>require</span> <span class="gr">'spec_helper'</span>
+
+  <span class="g">describe</span> <span class="b">User</span> <span class="g">do</span>
+  <span class="g">before</span> {</span> <span class="b">@user</span> =</span> <span class="p">User</span>.</span><span class="g">new</span>(</span>name:</span> <span class="gr">"Test User"</span>,</span> password:</span> <span class="gr">"abc123"</span>,</span> password_confirmation:</span> <span class="gr">"abc123"</span>)</span> }</span>
+    
+  <span>subject</span> {</span> <span class="b">@user</span> }</span>
+
+  <span class="g">it</span> <span>{ should respond_to(</span><span class="r">:name</span><span>) }</span>
+  <span class="g">it</span> <span>{ should respond_to(</span><span class="r">:password_digest</span><span>) }</span>
+  <span class="g">it</span> <span>{ should respond_to(</span><span class="r">:password</span><span>) }</span>
+  <span class="g">it</span> <span>{ should respond_to(</span><span class="r">:password_confirmation</span><span>) }</span>
+  <span class="g">it</span> <span>{ should respond_to(</span><span class="r">:remember_token</span><span>) }</span>
+  <span class="g">it</span> <span>{ should respond_to(</span><span class="r">:bankroll</span><span>) }</span>
+  
+  <span class="g">it</span> <span>{ should be_valid }</span>
+
+  <span>describe</span> <span class="gr">"when no name is entered"</span> <span class="g">do</span>
+    <span class="g">before</span> <span>{</span> <span class="b">@user</span><span>.name</span> <span class="g">=</span> <span class="gr">" "</span> }</span>
+    <span class="g">it</span> <span>{ should_not be_valid }</span>
+  <span class="g">end</span>
+  
+  <span>describe</span> <span class="gr">"when name is too long"</span> <span class="g">do</span>
+    <span class="g">before</span> <span>{</span> <span class="b">@user</span><span>.name</span> <span class="g">=</span> <span class="gr">"t"</span> <span class="g">*</span> <span class="r">26</span> <span>}</span>
+    <span class="g">it</span> <span>{ should_not be_valid }</span>
+  <span class="g">end</span>
+  
+  <span>describe</span> <span class="gr">"when name already exists"</span> <span class="g">do</span>
+    <span class="g">before do</span>
+      <span>user_with_same_name</span> <span class="g">=</span> <span class="b">@user</span><span>.dup</span>
+      <span>user_with_same_name.name</span> <span class="g">=</span> <span class="b">@user</span><span>.name.upcase</span>
+      <span>user_with_same_name.save</span>
+    <span class="g">end</span>
+    <span class="g">it</span> <span>{ should_not be_valid }</span>
+  <span class="g">end</span>
+  
+  <span>describe</span> <span class="gr">"with no password entered"</span> do</span>
+    <span class="g">before</span> <span>{</span> <span class="b">@user</span><span>.password <span class="g">=</span> <span class="b">@user</span><span>.password_confirmation</span> <span class="g">=</span> <span class="gr">" "</span> <span>}</span>
+    <span class="g">it</span> <span>{ should_not be_valid }</span>
+  <span class="g">end</span>
+
+  <span>describe</span> <span class="gr">"when password doesn't match confirmation"</span> <span class="g">do</span>
+    <span class="g">before</span> <span>{</span> <span class="b">@user</span><span>.password_confirmation</span> <span class="g">=</span> "mismatch"</span> <span>}</span>
+    <span class="g">it</span> <span>{ should_not be_valid }</span>
+  <span class="g">end</span>
+
+  <span>describe</span> <span class="gr">"when password confirmation is nil"</span> <span class="g">do</span>
+  <span class="g">before</span> <span>{</span> <span class="b">@user</span><span>.password_confirmation</span> <span class="g">=</span> <span class="r">nil</span> <span>}</span>
+    <span class="g">it</span> <span>{ should_not be_valid }</span>
+  <span class="g">end</span>
+  
+  <span>describe</span> <span class="gr">"with a password that's too short"</span> <span class="g">do</span>
+    <span class="g">before</span> <span>{</span> <span class="b">@user</span><span>.password</span> <span class="g">=</span> <span class="b">@user</span><span>.password_confirmation</span> <span class="g">=</span> <span class="gr">"a"</span> <span class="g">*</span> <span class="r">5</span> <span>}</span>
+    <span class="g">it</span> <span>{ should be_invalid }</span>
+  <span class="g">end</span>
+  
+  <span>describe</span> <span class="gr">"return value of authenticate method"</span> <span class="g">do</span>
+    <span class="g">before</span> <span>{</span> <span class="b">@user</span><span>.save }</span>
+    <span>let(</span><span class="r">:found_user</span><span>) {</span> <span class="p">User</span><span>.find_by_name(</span><span class="b">@user</span><span>.name) }</span>
+    
+  <span>describe</span> <span class="gr">"with valid password"</span> <span class="g">do</span>
+    <span class="g">it</span> <span>{ should</span> <span class="g">==</span> <span>found_user.authenticate(</span><span class="b">@user</span><span>.password) }</span>
+  <span class="g">end</span>
+
+  <span>describe</span> <span class="gr">"with invalid password"</span> <span class="g">do</span>
+    <span>let(</span><span class="r">:user_for_invalid_password</span><span>) { found_user.authenticate(</span><span class="gr">"invalid"</span><span>) }</span>
+
+    <span class="g">it</span> <span>{ should_not</span> <span class="g">==</span> <span>user_for_invalid_password }</span>
+      <span>specify { user_for_invalid_password.should be_false }</span>
+    <span class="g">end</span>
+  
+  <span>describe</span> <span class="gr">"remember token"</span> <span class="g">do</span>
+    <span class="g">before</span> <span>{</span> <span class="b">@user</span><span>.save }</span>
+    <span>its(</span><span class="r">:remember_token</span>) <span>{ should_not be_blank }</span>
+  <span class="g">end</span>
+ <span class="g">end</span>
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  So with that all passing we can move onto the sighnup and login.
+</p>

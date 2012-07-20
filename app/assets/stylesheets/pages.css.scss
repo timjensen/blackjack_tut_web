@@ -1,0 +1,66 @@
+@import "bootstrap";
+
+#wrapper {
+  margin: auto;
+  width: 942px;
+}
+#header { 
+  width: 942px;
+  background-color: black;
+}
+h1, h3 {
+  color: white ;
+  text-align: center;
+}
+#navbar {
+  width: 150px;
+  float: left;
+}
+#navbar a {
+  margin-left: 5px;
+}
+#main { 
+  width: 787px;
+  float:left;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  margin-bottom: 10px;
+}
+#cmd { 
+  background-color: #C0BBBB;
+  border: 1px solid black;
+  margin: 5px;
+  margin-left: 10px;
+  padding-right: 60px;
+}
+#cmd pre {
+  background-color: #C0BBBB;
+  border: none;
+  display: block; 
+}
+.r {
+  color: red;
+}
+.g {
+  color: #AF7817;
+}
+.b {
+  color: blue;
+}
+.p {
+  color: purple;
+}
+.gr {
+  color: green;
+}
+
+h1, h2 {
+  text-align: center;
+} 
+p {
+  text-align: justify;
+  margin: 5px 10px;
+}
+
+

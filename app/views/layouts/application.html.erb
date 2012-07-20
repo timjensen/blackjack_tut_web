@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BlackWeb</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <div id="wrapper">
+    <div id="header"><br>
+      <h1> Ruby on Rails Tutorial: BlackJack App </h1>
+      <h3>Created by Tim Jensen</h3><br>
+    </div>
+    <div id="navbar" >
+       <%= render 'layouts/navbar' %>
+    </div>
+    <div id="main">
+      <%= yield %>
+    </div>
+</div>
+</body>
+</html>

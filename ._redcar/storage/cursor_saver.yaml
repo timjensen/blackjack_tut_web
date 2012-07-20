@@ -1,0 +1,50 @@
+--- 
+cursor_positions: 
+  - :path: app/assets/stylesheets/pages.css.scss
+    :cursor_offset: 44
+    :timestamp: 2012-07-19 11:52:18.208000 +12:00
+  - :path: README.rdoc
+    :cursor_offset: 150
+    :timestamp: 2012-07-19 11:17:14.654000 +12:00
+  - :path: app/views/pages/_home.html.erb
+    :cursor_offset: 2335
+    :timestamp: 2012-07-19 13:17:30.140000 +12:00
+  - :path: app/views/pages/_user_model.html.erb
+    :cursor_offset: 1273
+    :timestamp: 2012-07-19 17:59:27.534000 +12:00
+  - :path: app/views/layouts/application.html.erb
+    :cursor_offset: 249
+    :timestamp: 2012-07-19 16:28:00.661000 +12:00
+  - :path: app/views/pages/home.html.erb
+    :cursor_offset: 346
+    :timestamp: 2012-07-19 16:28:43.159000 +12:00
+  - :path: app/views/pages/home.js.erb
+    :cursor_offset: 0
+    :timestamp: 2012-07-19 12:08:48.901000 +12:00
+    :selection_offset: 74
+    :block_selection_mode: false
+  - :path: app/views/pages/user.js.erb
+    :cursor_offset: 64
+    :timestamp: 2012-07-19 18:01:28.678000 +12:00
+  - :path: Gemfile
+    :cursor_offset: 52
+    :timestamp: 2012-07-19 13:56:20.078000 +12:00
+    :selection_offset: 81
+    :block_selection_mode: false
+  - :path: app/views/layouts/_navbar.html.erb
+    :cursor_offset: 580
+    :timestamp: 2012-07-19 21:22:28.062000 +12:00
+    :selection_offset: 589
+    :block_selection_mode: false
+  - :path: app/views/pages/_setup.html.erb
+    :cursor_offset: 625
+    :timestamp: 2012-07-19 22:19:19.295000 +12:00
+  - :path: app/views/pages/signin_login.js.erb
+    :cursor_offset: 72
+    :timestamp: 2012-07-20 11:06:38.244000 +12:00
+  - :path: app/views/pages/setup.js.erb
+    :cursor_offset: 0
+    :timestamp: 2012-07-19 13:08:05.608000 +12:00
+    :selection_offset: 75
+    :block_selection_mode: false
+files_to_retain: 0

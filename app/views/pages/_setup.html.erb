@@ -1,0 +1,96 @@
+<h2>Initial Setup</h2><br>
+<div>
+<p>
+  Okay so I am assuming you took my advice and have done Micheal Hartl's tutorial so you have Rails installed and setup correctly.
+  So first things first we have to create our new app and jump into its directory. Please note that I am curently developing on a 
+  windows machine and the command prompt looks terrible and is impossible to cut and paste so command line data will just be entered in a gray
+  box as below, data entered into the editor will now also be entered into grey boxes as some of you have already complained that you cant cut and paste from screenshots (lazy buggers).... 
+</p>
+</div>
+<div id="cmd" class="span9">
+<pre>
+<span>$ cd /rails_work </span>
+<span>$ rails new blackjack_tut --skip-test-unit </span>
+<span>$ cd blackjack_tut </span>
+</pre>
+</div>
+<p>
+  Note that I skipped the test unit creation which I honestly have not used yet, I am familiar with Rspec so this is what i'll be using in this tutorial.
+</p>
+<p>
+  Next we are going to add in all the gems we will be using during this tutorial.
+  <ul>
+    <li>rspec-rails - Which we will be using for our testing.</li>
+    <li>capybara - which allows us to simulate user interactions using english styled syntax while testing.</li>
+    <li>bcrypt-ruby - nice little gem to take care of password encryption (slightly overkill for this app but hey).</li>
+    <li>bootstrap-sass - which makes for super easy stylish looking CSS. </li>
+    <li>pg - which we use in production because heroku uses PostgreSQL. </li>
+  </ul>
+  <p>
+    Because you all took my advice and did Hartl's tutorial *cough* I dont have to explain why we put the gems into environment groups, 
+    but heres how you should edit your gemfile to look:
+  </p>
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span>source 'https://rubygems.org'</span>
+
+<span>gem</span> <span class="r">'rails'</span>,</span> <span class="r">'3.2.3'</span>
+<span>gem</span> <span class="r">'bootstrap-sass'</span>,</span> <span class="r">'2.0.0'</span>
+<span>gem</span> <span class="r">'bcrypt-ruby'</span>,</span> <span class="r">'3.0.1'</span>
+
+<span>group</span> <span class="b">:development</span>,</span> <span class="b">:test</span> <span class="g">do</span>
+<span>gem</span> <span class="r">'sqlite3'</span><span>,</span> <span class="r">'1.3.5'</span>
+<span>gem</span> <span class="r">'rspec-rails'</span><span>,</span> <span class="r">'2.9.0'</span>
+end</span>
+
+<span>group</span> <span class="b">:assets</span> <span class="g">do</span>
+  <span>gem</span> <span class="r">'sass-rails'</span><span>,</span>   <span class="r">'~> 3.2.3'</span>
+  <span>gem</span> <span class="r">'coffee-rails'</span><span>,</span> <span class="r">'~> 3.2.1'</span>
+
+<span>group</span> <span class="b">:test</span> do</span>
+  <span>gem</span> <span class="r">'capybara'</span><span>,</span> <span class="r">'1.1.2'</span>
+<span>end</span>
+
+<span>group</span> <span class="b">:production</span> <span class="g">do</span>
+  <span>gem</span> <span class="r">'pg'</span><span>,</span> <span class="r">'0.12.2'</span>
+<span>end</span>
+
+<span>gem<span class="r">'uglifier'</span><span>,</span> <span class="r">'>= 1.0.3'</span>
+<span>end</span>
+
+<span>gem</span> <span class="r">'jquery-rails'</span>
+</pre>
+</div>
+<p>
+  While you have your editor open you might aswell delete the index.html.erb file from the public directory because we will be setting up our own root path.
+</p>
+<p>
+  Now that we have our gem file all upto date we can install and include the new gems (excluding the production), and configure Rails to use Rspec like so:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span>$ bundle install --without production</span>
+<span>$ rails generate rspec:install</span>
+</pre>
+</div>
+<p>
+  With that done all we have to do is push to our github and heroku accounts which you have set up during Hartl's tutorial. Just create a new repository and setup and push like so:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span>$ git init</span>
+<span>$ git add .</span>
+<span>$ git commit -m "First commit"</span>
+<span>$ git remote add origin git@github.com:'your git account'/'repo name'.git</span>
+<span>$ git push -u origin master</span>
+<span>$ heroku create --stack cedar</span>
+<span>$ git push heroku master</span>
+</pre>
+</div>
+<p>
+  Nice Guys and Gals all setup and ready to start coding.
+</p><br>
+
+  
+  
