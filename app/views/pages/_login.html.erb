@@ -1,0 +1,175 @@
+<h2>Player Login</h2><br>
+<p>
+  Ok so now we have a user model setup and can signup the final piece of the puzzle before we get to
+  start coding blackjack is the login system. So once again we will start with the controller creation 
+  in this case we will create a sessions controller and test:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  $ rails generate controller Sessions --no-test-framework
+  $ rails generate integration_test authentication_pages
+</pre>
+</div>
+<p>
+  And now edit the session controller to look like this:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">class</span> <span class="br">SessionsController < ApplicationController</span>
+  
+  <span class="g">def</span> <span class="br">new</span>
+  <span class="g">end</span>
+
+  <span class="g">def</span> <span class="br">create</span>
+  user <span class="g">=</span> <span class="p">User</span>.find_by_name(params[<span class="r">:session</span>][<span class="r">:name</span>])
+  <span class="g">if</span> user <span class="g">&&</span> user.authenticate(params[<span class="r">:session</span>][<span class="r">:password</span>])
+    sign_in user
+    redirect_to signup_path
+  <span class="g">else</span>
+    flash.now[<span class="r">:error</span>] <span class="g">=</span> <span class="gr">'Invalid email/password combination'</span>
+      render <span class="gr">'new'</span>
+  <span class="g">end</span>
+  <span class="g">end</span>
+
+  <span class="g">def</span> <span class="br">destroy</span>
+    sign_out
+    redirect_to root_path
+  <span class="g">end</span>
+  
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  Now edit our SessionsHelper (located app/helpers/sessions_helper.rb) file to read as:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">module</span> <span class="br">SessionsHelper</span>
+  
+  <span class="g">def</span> <span class="br">sign_in</span>(<span class="b">user</span>)
+    cookies.permanent[<span class="r">:remember_token</span>] <span class="g">=</span> user.remember_token
+    current_user <span class="g">=</span> user
+  <span class="g">end</span>
+  
+  <span class="g">def</span> <span class="br">current_user=</span>(<span class="b">user</span>)
+    <span class="b">@current_user</span> <span class="g">=</span> user
+  <span class="g">end</span>
+  
+  <span class="g">def</span> <span class="br">current_user</span>
+    <span class="b">@current_user</span> <span class="g">||=</span> user_from_remember_token
+  <span class="g">end</span>
+  
+  <span class="g">private</span>
+
+    <span class="g">def</span> <span class="br">user_from_remember_token</span>
+      remember_token <span class="g">=</span> cookies[<span class="r">:remember_token</span>]
+      <span class="p">User</span>.find_by_remember_token(remember_token) <span class="g">unless</span> remember_token.nil?
+    <span class="g">end</span>
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  Next we make sure we include our helper in our Application controller like so:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">include</span> <span class="p">SessionsHelper</span>
+</pre>
+</div>
+<p>
+  Next we make a few changes to the routes file changing the root path, adding the login path and the sessions resources:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  resources <span class="r">:users</span>, <span class="r">:sessions</span>
+  root <span class="r">:to</span> => <span class="g">'session#new'</span>
+  match <span class="g">'/login'</span>, <span class="r">to:</span> <span class="g">'session#new'</span>
+</pre>
+</div>
+<p>
+  Finally we can create our form to be located in the file app/views/sessions/new.html.erb:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="br">&lt;h1></span>Sign in<span class="br">&lt;/h1></span>
+
+<span class="br">&lt;div class=</span><span class="gr">"row"</span><span class="br">></span>
+<span class="br">&lt;div class=</span><span class="gr">"span6 offset3"</span><span class="br">></span>
+    &lt;%= form_for(<span class="r">:session</span>, <span class="r">url:</span> sessions_path) <span class="g">do</span> <span class="b">|f|</span> %>
+  &lt;% flash.each <span class="g">do</span> <span class="b">|key, value|</span> %>
+        <span class="br">&lt;div class=</span>"alert alert-&lt;%= key %>">&lt;%= value %>v<span class="br">&lt;div></span>
+    &lt;% <span class="g">end</span> %>
+      &lt;%= f.label <span class="r">:name</span> %>
+      &lt;%= f.text_field <span class="r">:name</span> %>
+
+      &lt;%= f.label <span class="r">:password</span> %>
+      &lt;%= f.password_field <span class="r">:password</span> %>
+
+      &lt;%= f.submit <span class="gr">"Sign in"</span>, <span class="g">class:</span> <span class="gr">"btn btn-large btn-primary"</span> %>
+    <span class="g">&lt;% end %></span>
+
+    <span class="br">&lt;p></span>New player? &lt;%= link_to <span class="gr">"Sign up now!"</span>, signup_path %><span class="br">&lt;/p></span>
+  <span class="br">&lt;/div></span>
+<span class="br">&lt;/div> </span> 
+</pre>
+</div>
+<p>
+  Nice thats us all setup now and after the following testing is complete and coming back all green we can move onto something new. First we will have to setup
+  FactoryGirl which involves creating a spec/factories.rb file that looks like this: 
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="p">FactoryGirl</span>.define <span class="g">do</span>
+  factory <span class="r">:user</span> <span class="g">do</span>
+    sequence(<span class="r">:name</span>)  { <span class="b">|n|</span> <span class="gr">"Person #{n}"</span> }
+    password <span class="gr">"foobar"</span>
+    password_confirmation <span class="gr">"foobar"</span>
+    
+  <span class="g">end</span>
+<span class="g">end </span>
+</pre>
+</div>
+<p>
+  This series of tests
+  will go in the file created ealier spec/requests/user_logins.rb:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">require</span> <span class="gr">'spec_helper'</span>
+
+<span class="g">describe</span> <span class="gr">"UserLogins"</span> <span class="g">do</span>
+  subject { page }
+
+  <span class="g">describe</span> <span class="gr">"login page"</span> do
+    <span class="g">before</span> { visit login_path }
+
+    <span class="g">it</span> { should have_selector(<span class="gr">'h1'</span>,    <span class="r">text:</span> <span class="gr">'Sign in'</span>) }
+  <span class="g">end</span>
+  
+  describe <span class="gr">"signin"</span> <span class="g">do</span>
+    <span class="g">before</span> { visit login_path }
+
+    <span class="g">describe</span> <span class="gr">"with invalid information"</span> <span class="g">do</span>
+      <span class="g">before</span> { click_button <span class="gr">"Sign in"</span> }
+
+      <span class="g">it</span> { should have_selector(<span class="gr">'h1'</span>, <span class="r">text:</span> <span class="gr">'Sign in'</span>) }
+      <span class="g">it</span> { should have_selector(<span class="gr">'div.alert.alert-error'</span>, <span class="r">text:</span> <span class="gr">'Invalid'</span>) }
+    <span class="g">end</span>
+     describe <span class="gr">"with valid information" <span class="g">do</span>
+      let(<span class="r">:user</span>) { FactoryGirl</span>.create(<span class="r">:user</span>) }
+      <span class="g">before do</span>
+        fill_in <span class="gr">"Name"</span>,    <span class="r">with:</span> user.name
+        fill_in <span class="gr">"Password"</span>, <span class="r">with:</span> user.password
+        click_button <span class="gr">"Sign in"</span>
+      <span class="g">end</span>
+      
+      <span class="g">it</span> { should have_selector(<span class="gr">'h1'</span>,    <span class="r">text:</span> <span class="gr">'Sign Up For BlackJack'</span>) }
+      <span class="g">it</span> { should_not have_selector(<span class="gr">'div.alert.alert-error'</span>) }
+    <span class="g">end</span>
+  <span class="g">end</span>
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  Yay with our signup and login systems in place we can now move onto coding some BlackJack!!
+</p>

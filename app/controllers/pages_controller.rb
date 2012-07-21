@@ -6,16 +6,21 @@ class PagesController < ApplicationController
   def setup
   end
   
+  def css
+  end
+  
   def user
   end
   
-  def user_test
+  def signup
   end
   
-  def signup_login
+  def login
   end
   
-  def card_hand
+  def card
   end
   
+  def hand
+  end
 end

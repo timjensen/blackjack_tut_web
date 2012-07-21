@@ -64,7 +64,15 @@
 <p>
   With this done we have now setup and migrated our model and defined the model class. This is a simple test
   that should be passing at this point. I know most of you will just cut and paste it but take your time 
-  to make sure you understand what is happening.
+  to make sure you understand what is happening. But first we have to prepare the test environment database:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  $ bundle exec rake db:test:prepare
+</pre>
+</div>
+<p>
+  This is the test thats will be placed in the file created when we did the scaffold User model generate (located spec/models/user_spec.rb)
 </p>
 <div id="cmd" class="span9">
 <pre>
@@ -147,5 +155,5 @@
 </pre>
 </div>
 <p>
-  So with that all passing we can move onto the sighnup and login.
+  So with that all passing we can move onto the signup and login.
 </p>

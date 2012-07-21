@@ -1,0 +1,26 @@
+<h1>Creating the card class</h1>
+<p>
+  So I will slow it down now and explain each step everything before this was just a refresher, 
+  where as most of this will be new ground for most of you. So the first part of the BlackJack game development 
+  is the creation of the card model, this differs from all the models you will have created so far as this one is not 
+  an active record model. For example an empty User model file would look like:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">class</span> <span class="br">User < ActiveRecord::Base</span>
+  
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  Active Record objects don‘t specify their attributes directly, but rather infer them from the table definition with which they‘re linked.
+  If we created our card model like this everything would crash as we will not have a database table linked to it. So create a card.rb file in our app/models 
+  directory and enter the following:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">class</span> <span class="br">Card</span>
+  
+  <span class="g">end</span>
+</pre>
+</div>

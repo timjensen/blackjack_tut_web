@@ -1,0 +1,125 @@
+<h2> Player Sign-up</h2><br>
+<p>
+  This app may not have really needed you to sign in a user but I wanted to include some form of gambling so best way
+  was to login with a user that has a bankroll. In this section I will fly through the controller, views and routes need for our signup.
+</p>
+<p>
+  We will attack the User controller first, I have set the redirect on success of save to google.com so it doesnt throw an error and you can test out the login form if you wish. 
+  Later we will change the redirect to go to the login form:
+</P>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">class</span> <span class="br">UsersController < ApplicationController</span>
+ 
+  <span class="g">def</span> <span class="br">new</span>
+    <span class="b">@user</span> <span class="g">=</span> <span class="p">User</span>.new
+  <span class="g">end</span>
+  
+  <span class="g">def</span> <span class="br">create</span>
+    <span class="b">@user</span> <span class="g">=</span> <span class="p">User</span>.<span class="g">new</span>(params[<span class="r">:user</span>])
+    <span class="g">if</span> <span class="b">@user</span>.save
+      redirect_to <span class="gr">"https://www.google.co.nz/"</span>
+    <span class="g">else</span>
+      render <span class="gr">'new'</span>
+    <span class="g">end</span>
+  <span class="g">end</span>
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  So our app/views/users/new.html.erb will be a simple form that looks like this:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="br">&lt;div id=</span><span class="gr">"login_form"</span><span class="br">></span>
+
+<span class="br">&lt;h1 class=</span><span class="gr">"center"</span><span class="br">></span>Sign Up For BlackJack<span class="br">&lt;/h1></span>
+
+<span class="br">&lt;div class=</span><span class="gr">"row"</span><span class="br">></span>
+  <span class="br">&lt;div class=</span><span class="gr">"span6 offset1"</span><span class="br">></span>
+    &lt;%= form_for(<span class="b">@user</span>) <span class="g">do</span> <span class="b">|f|</span> %>
+    &lt;%= <span class="g">render</span> <span class="gr">'shared/error_messages'</span>, <span class="r">object:</span> f.object %>
+
+      &lt;%= f.label <span class="r">:name</span> %>
+      &lt;%= f.text_field <span class="r">:name</span> %>
+
+      &lt;%= f.label <span class="r">:password</span> %>
+      &lt;%= f.password_field <span class="r">:password</span> %>
+
+      &lt;%= f.label <span class="r">:password_confirmation</span>, <span class="gr">"Confirmation"</span> %>
+      &lt;%= f.password_field <span class="r">:password_confirmation</span> %>
+
+      &lt;%= f.submit <span class="gr">"Create my account"</span>, <span class="g">class:</span> <span class="gr">"btn btn-large btn-primary"</span> %>
+    &lt;% <span class="g">end</span> %>
+  <span class="br">&lt;/div></span>
+<span class="br">&lt;/div></span>
+<span class="br">&lt;/div></span>
+</pre>
+</div>
+<p>
+  We will also have to update our routes file (located config/routes.db):
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="p">BlackJack</span>::<span class="p">Application</span>.routes.draw <span class="g">do</span>
+  
+  resources <span class="r">:users</span>
+  
+  match <span class="gr">'/signup'</span>,  <span class="r">to:</span> <span class="gr">'users#new'</span>
+</pre>
+</div>
+<p>
+  And with those simple addition we now have a working signup. Create the following test and quickly check that 
+  everything is working as it should. Use the following to create the new test file we will use a integration test 
+  so that if the need araises we can test re-directs:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  $ rails generate integration_test user_signup
+</pre>
+</div>
+<p>
+  Your freshly created test file will be located at spec/requests/user_signup.rb edit it to look like this.
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">require</span> <span class="gr">'spec_helper'</span>
+
+<span class="g">describe</span> <span class="gr">"SignUp"</span> <span class="g">do</span>
+  
+  subject { page }
+  
+  <span class="g">describe</span> <span class="gr">"signup page"</span> <span class="g">do</span>
+    <span class="g">before</span> { visit signup_path }
+    <span class="g">it</span> { should have_selector(<span class="gr">'h1'</span>,    <span class="r">text:</span> <span class="gr">'Sign Up For BlackJack'</span>) }
+  <span class="g">end</span>
+<span class="g">end</span>
+<span class="g">describe</span> <span class="gr">"signup"</span> <span class="g">do</span>
+
+  <span class="g">before</span> { visit signup_path }
+
+  let(<span class="r">:submit</span>) { <span class="gr">"Create my account"</span> }
+
+  <span class="g">describe</span> <span class="gr">"with invalid information"</span> <span class="g">do</span>
+    <span class="g">it</span> <span class="gr">"should not create a user"</span> <span class="g">do</span>
+      expect { click_button submit }.not_to change(User</span>, <span class="r">:count</span>)
+    <span class="g">end</span>
+  <span class="g">end</span>
+
+  <span class="g">describe</span> <span class="gr">"with valid information"</span> <span class="g">do</span>
+    <span class="g">before do</span>
+      fill_in <span class="gr">"Name"</span>,         <span class="r">with:</span> <span class="gr">"Tim Jensen"</span>
+      fill_in <span class="gr">"Password"</span>,     <span class="r">with:</span> <span class="gr">"abc123"</span>
+      fill_in <span class="gr">"Confirmation"</span>, <span class="r">with:</span> <span class="gr">"abc123"</span>
+    <span class="g">end</span>
+
+    <span class="g">it</span> <span class="gr">"should create a user"</span> <span class="g">do</span>
+      expect { click_button submit }.to change(User</span>, <span class="r">:count</span>).by(<span class="r">1</span>)
+    <span class="g">end</span>
+  <span class="g">end</span>
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  With that test passing we can move onto our login system.
+</p>

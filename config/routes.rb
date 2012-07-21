@@ -4,10 +4,13 @@ BlackWeb::Application.routes.draw do
   
   resources :pages
   post 'pages/setup'
+  post 'pages/css'
   post 'pages/user'
   post 'pages/home'
-  post 'pages/signup_login'
-  post 'pages/card_hand'
+  post 'pages/signup'
+  post 'pages/login'
+  post 'pages/card'
+  post 'pages/hand'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

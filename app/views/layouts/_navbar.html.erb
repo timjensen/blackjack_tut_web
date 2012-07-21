@@ -1,6 +1,9 @@
 <h2> Menu </h2>
 <%= link_to "Introduction", { :controller => 'pages', :action => 'home' }, :remote => true, :method => :post %><br>
 <%= link_to "Initial Setup", { :controller => 'pages', :action => 'setup' }, :remote => true,  :method => :post %><br>
+<%= link_to "CSS", { :controller => 'pages', :action => 'css' }, :remote => true,  :method => :post %><br>
 <%= link_to "Setting Up User", { :controller => 'pages', :action => 'user' }, :remote => true,  :method => :post %><br>
-<%= link_to "Sign-up and Login", { :controller => 'pages', :action => 'signup_login' }, :remote => true,  :method => :post %><br>
-<%= link_to "Card and Hand Models", { :controller => 'pages', :action => 'card_hand' }, :remote => true,  :method => :post %><br>
+<%= link_to "Player Sign-up", { :controller => 'pages', :action => 'signup' }, :remote => true,  :method => :post %><br>
+<%= link_to "Player Login", { :controller => 'pages', :action => 'login' }, :remote => true,  :method => :post%><br>
+<%= link_to "Card Class", { :controller => 'pages', :action => 'card' }, :remote => true,  :method => :post %><br>
+<%= link_to "Hand Class", { :controller => 'pages', :action => 'hand' }, :remote => true,  :method => :post %><br>
