@@ -1,0 +1,105 @@
+<h2>Creating the Hand Model</h2>
+<p>
+  Now that we have created the card model we can create the hand model, although it could be argued which came first the egg or the chicken.
+  We will start off ofcourse creating the model hand.rb file in the app/models directory and entering the following:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">class</span> <span class="br">Hand</span>
+  
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  Now the hand class only contains two methods which we will look at now. The first one is the initialization of a new hand. A new hand contains an
+  empty array of cards and a default score of zero we code this as follows:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">def</span> <span class="br">initialize</span>
+    <span class="b">@cards</span><span class="g"> =</span> []
+    <span class="b">@score</span> <span class="g">=</span> <span class="r">0</span>
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  Ok so the second method in the the hand model is the score_of method which funnily enough calculates the score of the hand, take a look at the code
+  below and then we will go though it step by step:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">def</span> <span class="br">self.score_of</span>(<span class="b">hand</span>)
+   
+    score <span class="g">=</span> <span class="r">0</span>
+    
+    hand.cards.each <span class="g">do</span> <span class="b">|card|</span>
+      <span class="g">if</span> card.card_front <span class="g">!~ /a/</span>
+        score <span class="g">+=</span> <span class="p">Card</span>.value(card.card_front, score)
+      <span class="g">end</span>
+    <span class="g">end</span>
+    
+    hand.cards.each <span class="g">do</span> <span class="b">|card|</span>
+      <span class="g">if</span> card.card_front <span class="g">=~ /a/</span>
+        score <span class="g">+=</span> <span class="p">Card</span>.value(card.card_front, score)
+      <span class="g">end</span>
+    <span class="g">end</span>
+    
+    score
+  <span class="g">end</span>
+</pre>
+</div>
+<P>
+  As seen above we begin by setting a default value of the score to zero. The next part of the method loops through the cards in the hand and determines
+  if they are aces on not, any cards that are not aces are then processed by our card model method to find thier value and add it to the score variable. 
+  The reason we have have split this score method into two loops is we want the score of all non ace cards before we can calculate the value of an ace.
+  The next loop as just dicussed loops thru the cards in the hand selecting aces and calculating thier value then adding that value to the score variable.
+  The method is completed by returning the value of the score variable.
+</p>
+<p>
+  Now that we coded the hand model and understand it lets give it a test drive.
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">require <span class="g">'spec_helper'
+
+<span class="g">describe</span> <span class="b">Hand</span> <span class="g">do</span>
+  <span class="g">before</span> { <span class="b">@hand</span> <span class="g">=</span> <span class="p">Hand</span>.<span class="g">new</span> } 
+  subject { <span class="g">@hand</span> }
+  
+  <span class="g">it</span> { should respond_to(<span class="r">:score</span>) }
+  <span class="g">it</span> { should respond_to(<span class="r">:cards</span>) }
+  
+  describe <span class="gr">"initial score should be zero"</span> <span class="g">do</span>
+    subject { <span class="b">@score</span> }
+    <span class="g">before</span> { <span class="b">@score</span> <span class="g">=</span> <span class="b">@hand</span>.score }
+    <span class="g">it</span> { should <span class="g">==</span> <span class="r">0</span> }
+  <span class="g">end</span>
+  
+  describe <span class="gr">"initial card array should be empty"</span> <span class="g">do</span>
+    subject { <span class="b">@cards</span> }
+    <span class="g">before</span> { <span class="b">@cards</span> <span class="g">=</span> <span class="b">@hand</span>.cards.count }
+    <span class="g">it</span> { should <span class="g">==</span> <span class="r">0</span> }
+  <span class="g">end</span>
+  
+  describe <span class="gr">"build a hand"</span> <span class="g">do</span>
+    subject { <span class="b">@cards</span> }
+    <span class="g">before do</span>
+      <span class="b">@@pos</span> <span class="g">=</span> <span class="g">0</span>
+      <span class="b">@hand</span>.cards <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new</span><span class="g"> <<</span> <span class="p">Card</span>.<span class="g">new</span> 
+      <span class="b">@cards</span> <span class="g">=</span> <span class="g">@hand</span>.cards.count
+    <span class="g">end</span>
+    <span class="g">it</span> { should <span class="g">==</span> <span class="r">2</span> }
+  <span class="g">end</span>
+  
+  describe <span class="gr">"score a hand"</span> <span class="g">do</span>
+    <span class="g">before</span> { Hand</span>.score_of(<span class="b">@hand</span>)}
+    <span class="g">it</span> { should_not <span class="g">=</span> <span class="r">0</span> }
+  <span class="g">end</span>
+  
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  With our hand and card models now complete we can move on to the gutsy part of the coding the main controller which handles all the actions fired off
+  during the game.
+</p>

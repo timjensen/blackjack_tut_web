@@ -1,0 +1,120 @@
+<h2>Creating Game controller and views</h2>
+<p>
+  So we have our models done now we can code the one controller that will handle the rest of the BlackJack game for us and create the views that will
+  be required. So lets go ahead and use scaffolding to create a new game controller:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  $ rails generate controller Game --no-test-framework
+</pre>
+</div>
+<p>
+  The first action we are going to code index action, Im not sure why I used index because if you think back to Hartls tutorial index was used basically 
+  for a display all type of action. But it was there and I only needed the index action to set up a staging board for all the rest of the actions to associate
+  with as you will see as we move on. But heres the code for the index action anyway:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">def</span> <span class="br">index</span>
+  
+  session[<span class="r">:bet</span>] <span class="g">=</span> <span class="gr">"25"</span>;
+  
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  As I said above the index action basically uses the index.html.erb as a canvas to work with when using all the other actions, so the only thing set in the 
+  index action is a session variable called 'bet' which represent the bet we will be placing each hand this will make more sense as we progress. But we will move onto the creation of the 
+  app/views/games/index.html.erb. This file is the view you are redirected to when we log into the game and then changed using ajax for the rest of your logged in time (Its basically a home page). 
+  The file looks like this:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="br">&lt;div id=</span><span class="gr">"mainbox"</span><span class="br">></span>
+    <span class="br">&lt;div id=</span><span class="gr">"dealer"</span><span class="br">></span>
+      <span class="br">&lt;div id=</span><span class="gr">"dscore"</span><span class="br">></span> <span class="br">&lt;/div></span>
+         &lt;%= image_tag <span class="gr">"cards/back.png"</span>  %>&nbsp
+         &lt;%= image_tag <span class="gr">"cards/back.png"</span>  %>
+      <span class="br">&lt;/div></span>
+     <span class="br">&lt;div id=</span><span class="gr">"result"</span><span class="br">></span><span class="br">&lt;/div></span>
+     <span class="br">&lt;div id=</span><span class="gr">"player"</span><span class="br">></span>
+        &lt;%= image_tag <span class="gr">"cards/back.png"</span>  %>&nbsp
+        &lt;%= image_tag <span class="gr">"cards/back.png"</span>  %> 
+      <span class="br">&lt;/div></span>
+      <span class="br">&lt;div id=</span><span class="gr">"buttons"</span><span class="br">></span>
+        &lt;%= button_to <span class="gr">"DEAL"</span>, { <span class="r">:controller</span> => <span class="gr">'game'</span>, <span class="r">:action</span> => <span class="gr">'deal'</span> }, <span class="r">:remote</span> => <span class="r">true</span>, 
+        <span class="r">:class</span> => <span class="gr">'btn btn-large btn-primary'</span> %>  
+      <span class="br">&lt;/div></span>
+    <span class="br">&lt;/div></span>
+</pre>
+</div>
+<p>
+  So we have a standard html styled layout with a div to contain the game area, a div to contain the dealers cards and score, a div to contain 
+  a result message, a div to contain the current players cards and score and a div to contain the game buttons. This is the default display and each div will be updated 
+  using ajax as required. The only div that needs further explaining at this stage is the button div as I dont believe Hartl's tutorial covered rails
+  button_to syntax. So we begin by entering the text value of the button in quotation marks, we then pass in a block containing the controller and action
+  associated with the button. After that block we hit the part of the button that deals with our use of ajax this is defined in rails by calling 
+  :remote => true, by setting remote to true we allow the unobtrusive javascript drivers to control the submit behaviour and by default this behaviour is an ajax submit.
+</p>
+<p>
+  Now that we understand this view we know that we require an action in the game controller called deal to handle the initial dealing of cards, this
+  action looks like this:
+</p>
+<div id="cmd" class="span9">
+<pre>
+   <span class="g">def</span> <span class="br">deal</span>
+    <span class="g">if</span> got_the_dollars?
+      deduction
+      <span class="p">Card</span>.shuffle
+      hand <span class="g">=</span> <span class="p">Hand</span>.<span class="g">new</span>
+      hand.cards <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new</span> <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new
+      hand.score <span class="g">=</span> <span class="p">Hand.score_of(<span class="g">hand</span>)
+      session[<span class="r">:player_hand</span>] = hand
+      dhand <span class="g">=</span> <span class="p">Hand</span>.<span class="g">new</span>
+      dhand.cards <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new</span>
+      dhand.score <span class="g">=</span> <span class="p">Hand</span>.score_of(dhand)
+      dhand.cards <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new</span>
+      session[<span class="r">:dealer_hand</span>] = dhand
+      check_for_bj
+    <span class="g">else</span>
+      flash.now[<span class="g">:error</span>] <span class="g">=</span> <span class="g">'Your Broke Fool'</span>
+    <span class="g">end</span>
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  So our deal action starts off by firing a private action to check if the current player has enough money to play the hand called 'got_the_dollars?'
+   so we had better add a private section to our Game controller and enter the following action:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">private</span>
+  
+  <span class="g">def</span> <span class="br">got_the_dollars?</span>
+    bank <span class="g">=</span> current_user.bankroll.to_f
+    want <span class="g">=</span> session[<span class="r">:bet</span>].to_f
+    bank <span class="g">>=</span> want
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  So as you can see the the action to check if the player can afford the hand simple creates two variables each an integer one represents the current players bankroll and the
+  other represents the bet, after calculating if the bankroll is greater to or equal than the the next course of actions can be determined. If the player
+  has the funds to play the hand the deal action continues on by calling another private action 'deduction' oh btw we are making these private actions because they will be used in mutlipe 
+  actions and we want to keep the code as 'DRY' as possible. That said here is the deduction action:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">def</span> <span class="br">deduction</span>
+    bet <span class="g">=</span> session[<span class="r">:bet</span>].to_f
+    dollars <span class="g">=</span> current_user.bankroll.to_f
+    dollars <span class="g">-=</span> bet
+    current_user.bankroll <span class="g">=</span> dollars
+    current_user.save
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  Other than saying that we save the current user at the end of the deduction action becuase we use the updated user info to refresh the bankroll
+  display as the cards are dealt I'm not going to explaen deduction action in any depth its a simple mathematic function and is pretty self explanatory 
+</p>

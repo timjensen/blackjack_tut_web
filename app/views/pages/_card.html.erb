@@ -1,6 +1,6 @@
-<h1>Creating the card class</h1>
+<h2>Creating the Card Model</h2>
 <p>
-  So I will slow it down now and explain each step everything before this was just a refresher, 
+  So I will slow it down now and explain each step, everything before this was just a refresher
   where as most of this will be new ground for most of you. So the first part of the BlackJack game development 
   is the creation of the card model, this differs from all the models you will have created so far as this one is not 
   an active record model. For example an empty User model file would look like:
@@ -24,3 +24,139 @@
   <span class="g">end</span>
 </pre>
 </div>
+<p>
+  Ok the first part of the card class we will define will be a deck of cards to do this we will create a class variable 
+  by using the double at signs '@@' and give it the the value of an array of cards, to set this array we use the w%() method which if you 
+  havn't come across this yet tells ruby to break up a string into words, based on whitespace and return an array of those words. For instance %w(hello how are you)
+  would become ["hello". "how", "are", "you"]. So our deck variable will look like:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="b">@@deck</span> <span class="g">=</span> <span class="gr">%w(ah ac ad as 2h 2c 2d 2s 3h 3c 3d 3s 
+              4h 4c 4d 4s 5h 5c 5d 5s 6h 6c 6d 6s 
+              7h 7c 7d 7s 8h 8c 8d 8s 9h 9c 9d 9s 
+              th tc td ts jh jc jd js qh qc qd qs 
+              kh kc kd ks)</span>  
+</pre>
+</div>
+<p>
+  Our deck consists of 1-9, t, j, q and k of each suit the reason for this format will become apparent later when we work out each cards value.
+  Next part of the card class we will code is the the shuffling of the card deck. Here we code an method that sets another class variable '@@pos' which we set to 
+  equal zero, this interger will later be increased each time we draw a card to relate to the position of the deck array that the next card will be drawn from.
+  We also reset the the @@deck variable to itself sorted by random which mimics the shuffling of a deck of cards:
+</p>  
+<div id="cmd" class="span9">
+<pre>
+<span class="g">def</span> <span class="br">self.shuffle</span>
+  <span class="b">@@pos</span> <span class="g">=</span> <span class="r">0</span>
+  <span class="b">@@deck</span> <span class="g">=</span> <span class="b">@@deck</span>.sort_by{ rand }
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  Next we will code the initialize function which is fired off when we ask for a new card.  This creates a new instance variable which we have called @card_front which selects
+  the next card in the deck using the already setup class variables, we grab the card in the @@deck array where the index is @@pos.
+  Then updates the @poss class variable to increase by 1 keeping a record of where to draw the next card from in the deck array:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">def</span> <span class="br">initialize</span>
+  <span class="b">@card_front</span> <span class="g">=</span> <span class="b">@@deck</span>[<span class="b">@@pos</span>]
+  <span class="b">@@pos</span> <span class="g">+=</span> <span class="r">1</span>
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  The last method we will be coding is the value method which takes a card (each card is represented by our card_front variable) and calculates what value that card has.
+  When calling this method we pass in our card (card_front) and current score of the hand (which we will look at when we build the hand class), the reason we need to pass in the
+  score is it plays a role in deciding the value of an ace. Take a look at the code for the value method and then we can go through it step by step:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">def</span> <span class="br">self.value</span>(<span class="b">card_front</span>, <span class="b">score</span>)
+  value <span class="g">=</span> <span class="r">0</span>
+    
+    <span class="g">if</span> card_front <span class="g">=~</span> /\d/
+      value <span class="g">+=</span> card_front[<span class="r">0</span>,<span class="r">1</span>].to_i
+    
+    <span class="g">elsif</span> card_front <span class="g">=~</span> /a/
+      <span class="g">if</span> score <span class="g">+</span> <span class="r">11</span> <span class="g">></span> <span class="r">21</span>
+        value <span class="g">=</span> <span class="r">1</span>
+      <span class="g">else</span>
+        value <span class="g">=</span> <span class="r">11</span>
+      <span class="g">end</span>
+    
+   <span class="g"> else</span>
+      value <span class="g">=</span> <span class="r">10</span>
+    <span class="g">end</span>
+    
+    value
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  The first part is pretty basic set the value to zero. Next we take the card and using regex check if it contains a digit, if it does contain a digit
+  we know that only the first character of the string is a digit because that is how we designed our array variables. With this knowledge we can convert the first character of our string 
+  to an integer and add it to the value variable.
+</p>
+<p>
+  If the card does not contain a digit we move onto check if the card is an ace by checking for the presence of the letter 'a'. If the card does contain the letter 'a' we now have to 
+  calculate if the ace should have a value of 1 or 11. This is where the score come into play, if the current hand score plus 11 is greater than 21 the value of this ace is set to 1 to prevent the player/dealer
+  from going bust, if the score plus card doesn't cause the hand to go bust as 11 the value will be set to 11.
+</p>
+<p>
+  With the value of all cards containing a digit or the letter 'a' set we can now safely set the values of anyother cards (such cards as tens, jack, queens and kings) to have a value of 10. We conclude the method by by returning
+  the new value.
+</p>
+<p>
+  With our model all coded its time for everyones favourite part.... thats right its testing time. The following is the testing I have used:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">require</span> <span class="gr">'spec_helper'</span>
+
+<span class="g">describe</span> <span class="b">Card</span> <span class="g">do</span>
+  <span class="b">@@deck</span> <span class="g">=</span> <span class="gr">%w(ah ac ad as 2h 2c 2d 2s 3h 3c 3d 3s 
+              4h 4c 4d 4s 5h 5c 5d 5s 6h 6c 6d 6s 
+              7h 7c 7d 7s 8h 8c 8d 8s 9h 9c 9d 9s 
+              th tc td ts jh jc jd js qh qc qd qs 
+              kh kc kd ks)</span>
+  <span class="b">@newcard</span> <span class="g">=</span> <span class="r">nil</span>
+                 
+  <span class="g">describe</span> <span class="gr">"after cards have been shuffled"</span> <span class="g">do</span>
+    subject { <span class="b">@@deck</span> }
+    let(<span class="r">:after_shuffle</span>) { <span class="p">Card</span>.shuffle }
+    <span class="g">it</span> { should_not <span class="g">==</span> after_shuffle } 
+  <span class="g">end</span>
+    
+  describe <span class="gr">"new card dealt"</span> <span class="g">do</span>
+    subject { <span class="r">@newcard</span> }
+    <span class="g">before</span> { <span class="b">@newcard</span> <span class="g">=</span> <span class="p">Card</span>.new }
+    <span class="g">it</span> { should_not <span class="g">==</span> <span class="r">nil</span> }
+  <span class="g">end</span>
+  
+  subject { <span class="b">@card_val</span> }
+  
+  describe <span class="gr">"value of a low ace"</span> <span class="g">do</span>
+    <span class="g">before</span> { <span class="b">@card_val</span> =</span> <span class="p">Card</span>.value(<span class="gr">'ac'</span>, <span class="r">1</span>)}
+    <span class="g">it</span> { should <span class="g">==</span> <span class="r">11</span> }
+  <span class="g">end</span>
+  
+  describe <span class="gr">"value of a high ace"</span> <span class="g">do</span>
+    <span class="g">before</span> { <span class="b">@card_val</span> <span class="g">=</span> <span class="p">Card</span>.value(<span class="gr">'ac'</span>, <span class="r">13</span>)}
+    <span class="g">it</span> { should <span class="g">==</span> <span class="r">1</span> }
+  <span class="g">end</span>
+  
+  describe <span class="gr">"value of a number card"</span> <span class="g">do</span>
+    <span class="g">before</span> { <span class="b">@card_val</span> <span class="g">=</span> <span class="p">Card</span>.value(<span class="gr">'7c'</span>, <span class="r">1</span>)}
+    <span class="g">it</span> { should <span class="g">==</span> <span class="r">7</span> }
+  <span class="g">end</span>
+  
+  describe <span class="gr">"value of any other cards"</span> <span class="g">do</span>
+    <span class="g">before</span> { <span class="b">@card_val</span> <span class="g">=</span> <span class="p">Card</span>.value(<span class="gr">'th'</span>, <span class="r">1</span>)}
+    <span class="g">it</span> { should <span class="g">==</span> <span class="r">10</span> }
+  <span class="g">end</span>
+<span class="g">end</span>
+<p>
+  We can now move on to coding our hand model.
+</p>
