@@ -132,7 +132,7 @@
   describe <span class="gr">"new card dealt"</span> <span class="g">do</span>
     subject { <span class="r">@newcard</span> }
     <span class="g">before</span> { <span class="b">@newcard</span> <span class="g">=</span> <span class="p">Card</span>.new }
-    <span class="g">it</span> { should_not <span class="g">==</span> <span class="r">nil</span> }
+    <span class="g">it</span> { should respond_to(<span class="r">:card_front</span>) }
   <span class="g">end</span>
   
   subject { <span class="b">@card_val</span> }
@@ -157,6 +157,8 @@
     <span class="g">it</span> { should <span class="g">==</span> <span class="r">10</span> }
   <span class="g">end</span>
 <span class="g">end</span>
+</pre>
+</div>
 <p>
   We can now move on to coding our hand model.
 </p>

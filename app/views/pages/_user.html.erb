@@ -21,7 +21,6 @@
      <span> t.string</span>  <span class="r">:name</span>
       <span>t.string</span>  <span class="r">:password_digest</span>
       <span>t.integer</span> <span class="r">:bankroll</span><span>,</span> <span class="r">:default</span> <span>=></span> <span class="gr">"2000"</span>
-      <span>t.string</span>  <span class="r">:remember_token</span>
       <span>t.timestamps</span>
     <span class="g">end</span>
     <span class="g">add_index</span>  <span class="r">:users</span><span>,</span> <span class="r">:remember_token</span>
@@ -50,14 +49,7 @@
       <span class="r">uniqueness: { case_sensitive: false }</span>
   <span>validates</span> <span class="r">:password</span><span>,</span> <span class="r">length: { minimum: 6 }</span>
   <span>validates</span> <span class="r">:password_confirmation</span><span>,</span> <span class="r">presence: true</span>
-  
-  <span class="g">before_save</span> <span class="r">:create_remember_token</span>
-  
-  <span class="g">private</span>
-
-    <span class="g">def</span> create_remember_token</span>
-      <span class="b">self</span><span>.remember_token</span><span> =</span> <span class="p">SecureRandom</span><span>.urlsafe_base64</span>
-    <span class="g">end</span>
+    
 <span class="g">end</span>
 </pre>
 </div>
@@ -87,7 +79,6 @@
   <span class="g">it</span> <span>{ should respond_to(</span><span class="r">:password_digest</span><span>) }</span>
   <span class="g">it</span> <span>{ should respond_to(</span><span class="r">:password</span><span>) }</span>
   <span class="g">it</span> <span>{ should respond_to(</span><span class="r">:password_confirmation</span><span>) }</span>
-  <span class="g">it</span> <span>{ should respond_to(</span><span class="r">:remember_token</span><span>) }</span>
   <span class="g">it</span> <span>{ should respond_to(</span><span class="r">:bankroll</span><span>) }</span>
   
   <span class="g">it</span> <span>{ should be_valid }</span>
@@ -145,11 +136,7 @@
     <span class="g">it</span> <span>{ should_not</span> <span class="g">==</span> <span>user_for_invalid_password }</span>
       <span>specify { user_for_invalid_password.should be_false }</span>
     <span class="g">end</span>
-  
-  <span>describe</span> <span class="gr">"remember token"</span> <span class="g">do</span>
-    <span class="g">before</span> <span>{</span> <span class="b">@user</span><span>.save }</span>
-    <span>its(</span><span class="r">:remember_token</span>) <span>{ should_not be_blank }</span>
-  <span class="g">end</span>
+    
  <span class="g">end</span>
 <span class="g">end</span>
 </pre>

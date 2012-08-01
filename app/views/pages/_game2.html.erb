@@ -1,0 +1,32 @@
+<h1>The magic partials</h1>
+<p>
+  Ok we just looked at our first javascript file and we now understand that a few pretials are required 
+  to complete the deal action, these partials will also be used after the actions we are yet to look at.
+  The first partial we will look at is the results partial so go ahead and create the _results.html.erb
+  file in your views/games directory and enter the following:
+</p>
+<div id="cmd" class="span9">
+<pre>
+&lt;% flash.each <span class="g">do</span> <span class="b">|key, value|</span> %>
+  <span class="br">&lt;div class=</span><span class="gr">"alert alert-&lt;%= key %>"</span><span class="br">></span>&lt;%= value %><span class="br">&lt;/div></span>
+&lt;% <span class="g">end</span> %>
+</pre>
+</div>
+<p>
+  This partial should look fimiliar as it was used in Hartl's tutorial on most our forms to display error and success 
+  messages, in my original project I hard coded alot of result variables and formated div for different response so basically a page of coding 
+  can be reduced to a few lines using flash calls. The next partial we will code will be the partial that contains the players cards and score.
+  So go ahead and create the _players_cards.html.erb file in your views/games directory:
+</p>
+<div id="cmd" class="span9">
+<pre>
+&lt;% for card in session[<span class="r">:player_hand</span>].cards %>
+  &lt;%= image_tag <span class="gr">"cards/#{card.card_front}.png"</span>  %>
+&lt;% <span class="g">end</span> %>
+&lt;%= label <span class="r">:players_hand</span>,<span class="gr">"Players Score: #{session[:player_hand].score}"</span> %>
+</pre>
+</div>
+<p>
+  So the players cards partial takes the player hand session variable and using the cards array with in the hand
+  loops through displaying each card using a image tag popluated with a url dynamically set using card front values.
+  The last little bit simple sets a label displaying the players score from once again from the players hand session variable.

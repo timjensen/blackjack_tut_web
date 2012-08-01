@@ -1,4 +1,4 @@
-<h2>Creating Game controller and views</h2>
+<h2>Game controller 'Deal' and private actions</h2>
 <p>
   So we have our models done now we can code the one controller that will handle the rest of the BlackJack game for us and create the views that will
   be required. So lets go ahead and use scaffolding to create a new game controller:
@@ -17,7 +17,7 @@
 <pre>
 <span class="g">def</span> <span class="br">index</span>
   
-  session[<span class="r">:bet</span>] <span class="g">=</span> <span class="gr">"25"</span>;
+  session[<span class="r">:bet</span>] <span class="g">=</span> <span class="gr">"100"</span>;
   
 <span class="g">end</span>
 </pre>
@@ -67,17 +67,17 @@
       deduction
       <span class="p">Card</span>.shuffle
       hand <span class="g">=</span> <span class="p">Hand</span>.<span class="g">new</span>
-      hand.cards <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new</span> <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new
-      hand.score <span class="g">=</span> <span class="p">Hand.score_of(<span class="g">hand</span>)
-      session[<span class="r">:player_hand</span>] = hand
+      hand.cards <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new</span> <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new</span>
+      hand.score <span class="g">=</span> <span class="p">Hand</span>.score_of(<span class="g">hand</span>)
+      session[<span class="r">:player_hand</span>] <span class="g">=</span> hand
       dhand <span class="g">=</span> <span class="p">Hand</span>.<span class="g">new</span>
       dhand.cards <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new</span>
       dhand.score <span class="g">=</span> <span class="p">Hand</span>.score_of(dhand)
       dhand.cards <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new</span>
-      session[<span class="r">:dealer_hand</span>] = dhand
+      session[<span class="r">:dealer_hand</span>] <span class="g">=</span> dhand
       check_for_bj
     <span class="g">else</span>
-      flash.now[<span class="g">:error</span>] <span class="g">=</span> <span class="g">'Your Broke Fool'</span>
+      flash.now[<span class="r">:error</span>] <span class="g">=</span> <span class="gr">'You're Broke Fool'</span>
     <span class="g">end</span>
   <span class="g">end</span>
 </pre>
@@ -91,30 +91,82 @@
   <span class="g">private</span>
   
   <span class="g">def</span> <span class="br">got_the_dollars?</span>
-    bank <span class="g">=</span> current_user.bankroll.to_f
+    bank <span class="g">=</span> session[<span class="r">:user</span>].bankroll.to_f
     want <span class="g">=</span> session[<span class="r">:bet</span>].to_f
     bank <span class="g">>=</span> want
   <span class="g">end</span>
 </pre>
 </div>
 <p>
-  So as you can see the the action to check if the player can afford the hand simple creates two variables each an integer one represents the current players bankroll and the
-  other represents the bet, after calculating if the bankroll is greater to or equal than the the next course of actions can be determined. If the player
-  has the funds to play the hand the deal action continues on by calling another private action 'deduction' oh btw we are making these private actions because they will be used in mutlipe 
+  So as you can see the action to check if the player can afford the hand simple creates two variables each an integer one represents the current players bankroll and the
+  other represents the bet, after calculating if the bankroll is greater to or equal than the the next course of actions can be determined. If the player does not have the funds the if statement directs to the bottom of the 
+  action simply setting an error flash, where if the player has the funds to play the hand the deal action continues on by calling another private action 'deduction' oh btw we are making these private actions because they will be used in mutlipe 
   actions and we want to keep the code as 'DRY' as possible. That said here is the deduction action:
 </p>
 <div id="cmd" class="span9">
 <pre>
   <span class="g">def</span> <span class="br">deduction</span>
     bet <span class="g">=</span> session[<span class="r">:bet</span>].to_f
-    dollars <span class="g">=</span> current_user.bankroll.to_f
+    dollars <span class="g">=</span> session[<span class="r">:user</span>].bankroll.to_f
     dollars <span class="g">-=</span> bet
-    current_user.bankroll <span class="g">=</span> dollars
-    current_user.save
+    session[<span class="r">:user</span>].bankroll <span class="g">=</span> dollars
+    session[<span class="r">:user</span>].save
   <span class="g">end</span>
 </pre>
 </div>
 <p>
   Other than saying that we save the current user at the end of the deduction action becuase we use the updated user info to refresh the bankroll
-  display as the cards are dealt I'm not going to explaen deduction action in any depth its a simple mathematic function and is pretty self explanatory 
+  display as the cards are dealt I'm not going to explain the deduction action in any depth as its a simple mathematic function and is pretty self explanatory. 
+</p>
+<p>
+  Moving on... Once the deduction action as been completed the deal action continues by performing the card shuffling method we coded in the card model.
+  Followed by the creation a new variable 'hand' which is set to the value of a newly initialized hand, we then add two new cards into the hand objects 
+  card array, next we set the hand objects score attribute by calling the 'score_of' on the current hand. Now that our hand object has been given cards and a score
+  we use it to set a session variable for the players hand. 
+</p>
+<p>
+  With the players hand sorted we can move onto creating the dealers hand this is very similar to the steps taken to create the players hand with one
+  exception the score is calculated after the first card is added to the card array, this is so that a player does not know the dealers full score directly 
+  after the deal. The final step of the section of the deal action that resulted from the player having the funds to play the hand is the checking of the hand
+  for BlackJack to do this we use the private action check_for_bj which looks like this:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">def</span> <span class="br">check_for_bj</span>
+    <span class="g">if</span> (session[<span class="r">:player_hand</span>].score<span class="g"> ==</span> <span class="r">21</span>)
+    bet <span class="g">=</span> session[<span class="r">:bet</span>].to_f
+    dollars <span class="g">=</span> session[<span class="r">:user</span>].bankroll.to_f
+    flash[<span class="r">:success</span>] <span class="g">=</span> <span class="gr">"Congratulations You Hit BlackJack!!"</span>
+    dollars <span class="g">+=</span> (bet <span class="g">*</span> <span class="r">3.5</span>)
+    session[<span class="r">:user</span>].bankroll <span class="g">=</span> dollars
+    session[<span class="r">:user</span>].save
+  <span class="g">end</span>
+<span class="g">end</span>
+</pre>
+</div>
+<p>
+  Another fairly self explanitory action the check_for_bj simply checks if the players hand (using players hand session variable) equals twenty one.
+  If true then performs a simple mathematic sequence to give correct payout, then set a flash response and finally updating the current players details
+  using save. That concludes the coding of the dealer and required private actions we will now code the javascript file that will be called to 
+  update the sections of our page we wish to update AJAX styles and the partials required.
+</p>
+<p>
+  So in Hartl's tutorial when ever we coded an action we made a view that by name was associated with it which meant full page loads after each action.
+  We are doing this different for our app we will not make a javascript file that will be associated by name which the action will default call. So
+  lets go ahead and and create a a new javascript file in the app/views/game directory called deal.js.erb, note the erb is not required but i have needed to add it before
+  and redcar never lets me change the extensions once a file is created so i add it just incase.
+  So our deal.js.erb file will look like this:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">$</span>(<span class="gr">"#result"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "results") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#player"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "players_cards") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#dealer"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "dealers_initial") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#spacer"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "player") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#buttons"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "buttons") ) %>"</span>);
+</pre>
+</div>
+<p>
+  As you can see the the javascript simple targets a div on our page and renders the selected partial with in it saving us from having to reload the entire page.
+  So you have probably looked at this javascript file and realised its time to code a handful of new partials so lets move on to these.
 </p>

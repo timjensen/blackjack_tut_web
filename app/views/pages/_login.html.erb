@@ -23,7 +23,7 @@
   <span class="g">def</span> <span class="br">create</span>
   user <span class="g">=</span> <span class="p">User</span>.find_by_name(params[<span class="r">:session</span>][<span class="r">:name</span>])
   <span class="g">if</span> user <span class="g">&&</span> user.authenticate(params[<span class="r">:session</span>][<span class="r">:password</span>])
-    sign_in user
+    session[:user] = user
     redirect_to signup_path
   <span class="g">else</span>
     flash.now[<span class="r">:error</span>] <span class="g">=</span> <span class="gr">'Invalid email/password combination'</span>
@@ -37,43 +37,6 @@
   <span class="g">end</span>
   
 <span class="g">end</span>
-</pre>
-</div>
-<p>
-  Now edit our SessionsHelper (located app/helpers/sessions_helper.rb) file to read as:
-</p>
-<div id="cmd" class="span9">
-<pre>
-<span class="g">module</span> <span class="br">SessionsHelper</span>
-  
-  <span class="g">def</span> <span class="br">sign_in</span>(<span class="b">user</span>)
-    cookies.permanent[<span class="r">:remember_token</span>] <span class="g">=</span> user.remember_token
-    current_user <span class="g">=</span> user
-  <span class="g">end</span>
-  
-  <span class="g">def</span> <span class="br">current_user=</span>(<span class="b">user</span>)
-    <span class="b">@current_user</span> <span class="g">=</span> user
-  <span class="g">end</span>
-  
-  <span class="g">def</span> <span class="br">current_user</span>
-    <span class="b">@current_user</span> <span class="g">||=</span> user_from_remember_token
-  <span class="g">end</span>
-  
-  <span class="g">private</span>
-
-    <span class="g">def</span> <span class="br">user_from_remember_token</span>
-      remember_token <span class="g">=</span> cookies[<span class="r">:remember_token</span>]
-      <span class="p">User</span>.find_by_remember_token(remember_token) <span class="g">unless</span> remember_token.nil?
-    <span class="g">end</span>
-<span class="g">end</span>
-</pre>
-</div>
-<p>
-  Next we make sure we include our helper in our Application controller like so:
-</p>
-<div id="cmd" class="span9">
-<pre>
-  <span class="g">include</span> <span class="p">SessionsHelper</span>
 </pre>
 </div>
 <p>
