@@ -30,3 +30,63 @@
   So the players cards partial takes the player hand session variable and using the cards array with in the hand
   loops through displaying each card using a image tag popluated with a url dynamically set using card front values.
   The last little bit simple sets a label displaying the players score from once again from the players hand session variable.
+  So the next partial we will cde is the dealers initial card partial, this partial is similar to the the players card partial with one obvious 
+  difference. So go ahead and create our _dealers_initial.html.erb file in your views/games directory:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="br">&lt;div id=</span><span class="gr">"dscore"</span><span class="br">></span>
+&lt;%= label <span class="r">:dealers_score</span>, <span class="gr">"Dealers Score:#{session[:dealer_hand].score}"</span> %>
+<span class="br">&lt;/div></span>
+&lt;%= image_tag <span class="gr">"cards/#{session[:dealer_hand].cards[0].card_front}.png"</span>  %>&nbsp
+&lt;%= image_tag <span class="gr">"cards/back.png"</span> %>
+</pre>
+</div>
+<p>
+  So like the player card partial we display a score, but the dealer initial contains no loop we simple display the card with the 
+  first index in the card array and the second card is a statically set image with the back of a card. This is purely for the the deal action 
+  all following actions we will use a different partial that we will code later on.
+  The last partial we are required to code to for the completion of the deal action is the buttons partial so lets og ahead and create your
+  _buttons.html.erb file once again in you views/games directory:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  &lt;% <span class="g">if</span> (session[<span class="r">:gamestate</span>] <span class="g">==</span> <span class="gr">"Third"</span>) %>
+<span class="br">&lt;center></span>
+<span class="br">&lt;table></span>
+  <span class="br">&lt;tr>&lt;td></span>
+    &lt;%= button_to <span class="gr">"HIT"</span>, { <span class="r">:controller</span> => 'game'</span>, <span class="r">:action</span> => <span class="gr">'hit'</span> }, <span class="r">:remote</span> => <span class="r">true</span>, <span class="r">:class</span> => <span class="gr">'btn btn-large btn-primary'</span> %>
+  <span class="br">&lt;/td>&lt;td></span>&nbsp<span class="br">&lt;/td>&lt;td></span>
+    &lt;%= button_to <span class="gr">"STAY"</span>, { <span class="r">:controller</span> => 'game'</span>, <span class="r">:action</span> => <span class="gr">'stay'</span> }, <span class="r">:remote</span> => <span class="r">true</span>, <span class="r">:class</span> => <span class="gr">'btn btn-large btn-primary'</span> %>
+  <span class="br">&lt;/td>&lt;/tr></span>
+<span class="br">&lt;/table></span>
+<span class="br">&lt;/center></span>
+&lt;% elsif (session[<span class="r">:gamestate</span>] <span class="g">==</span> <span class="gr">"Dealt"</span>) %>
+<span class="br">&lt;center></span>
+<span class="br">&lt;table></span>
+  <span class="br">&lt;tr>&lt;td></span>
+    &lt;%= button_to <span class="gr">"HIT"</span>, { <span class="r">:controller</span> => <span class="gr">'game'</span>, <span class="r">:action</span> => <span class="gr">'hit'</span> }, <span class="r">:remote</span> => <span class="r">true</span>, <span class="r">:class</span> => <span class="gr">'btn btn-large btn-primary'</span> %>
+  <span class="br">&lt;/td>&lt;td></span>&nbsp<span class="br">&lt;/td>&lt;td></span>
+    &lt;%= button_to <span class="gr">"DOUBLE"</span>, { <span class="r">:controller</span> => <span class="gr">'game'</span>, <span class="r">:action</span> => <span class="gr">'double'</span> }, <span class="r">:remote</span> => <span class="r">true</span>, <span class="r">:class</span> => <span class="gr">'btn btn-large btn-primary'</span> %>
+  <span class="br">&lt;/td>
+  &lt;td>&nbsp&lt;/td>&lt;td></span>
+    &lt;%= button_to <span class="gr">"STAY"</span>, { <span class="r">:controller</span> => <span class="gr">'game'</span>, <span class="r">:action</span> => <span class="gr">'stay'</span> }, <span class="r">:remote</span> => <span class="r">true</span>, <span class="r">:class</span> => <span class="gr">'btn btn-large btn-primary'</span> %>
+  <span class="br">&lt;/td>
+  &lt;/tr>
+&lt;/table>
+&lt;/center></span>
+&lt;% <span class="g">else</span> %>
+&lt;%= button_to <span class="gr">"DEAL"</span>, { <span class="r">:controller</span> => <span class="gr">'game'</span>, <span class="r">:action</span> => <span class="gr">'deal'</span> }, <span class="r">:remote</span> => <span class="r">true</span>, <span class="r">:class</span> => <span class="gr">'btn btn-large btn-primary'</span> %> 
+&lt;% <span class="g">end</span> %>
+</pre>
+</div>
+<p>
+  Ok so obvisouly we want different buttons to be present at different stages of the game to acheive this I used the session variable
+  gamestate to perform a if statement filter in the buttons partial. The first filter checks if the gamestate is set to third which is set by the 
+  hit action, this is done as the rules of blackjack state that you can only double striaght after the deal.
+  The next filter checks if gamestate is set to 'Dealt' this option displays all 3 buttons. Final any other gamestates will result in the deal button being the only
+  button displayed.
+</p>
+<p>
+  With these partials taken care of we can move onto the coding of game controllers hit action.
+</p>
