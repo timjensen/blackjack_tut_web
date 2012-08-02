@@ -3,9 +3,6 @@ cursor_positions:
   - :path: README.rdoc
     :cursor_offset: 150
     :timestamp: 2012-07-19 11:17:14.654000 +12:00
-  - :path: app/views/pages/_home.html.erb
-    :cursor_offset: 2335
-    :timestamp: 2012-07-19 13:17:30.140000 +12:00
   - :path: app/views/pages/_user_model.html.erb
     :cursor_offset: 1273
     :timestamp: 2012-07-19 17:59:27.534000 +12:00
@@ -60,45 +57,55 @@ cursor_positions:
   - :path: app/views/pages/setup.js.erb
     :cursor_offset: 75
     :timestamp: 2012-07-19 13:08:05.608000 +12:00
-  - :path: app/views/pages/_css.html.erb
-    :cursor_offset: 141
-    :timestamp: 2012-07-20 14:51:35.918000 +12:00
-  - :path: app/views/pages/_setup.html.erb
-    :cursor_offset: 625
-    :timestamp: 2012-07-19 22:19:19.295000 +12:00
+  - :path: app/views/pages/_game.html.erb
+    :cursor_offset: 2447
+    :timestamp: 2012-07-31 21:57:21.225000 +12:00
+  - :path: app/views/pages/showpage.js.erb
+    :cursor_offset: 0
+    :timestamp: 2012-07-23 12:51:35 +12:00
+  - :path: app/views/pages/_home.html.erb
+    :cursor_offset: 2469
+    :timestamp: 2012-08-01 21:30:00.482000 +12:00
+  - :path: app/views/pages/_user.html.erb
+    :cursor_offset: 9099
+    :timestamp: 2012-08-01 21:30:43.022000 +12:00
+  - :path: app/views/pages/_login.html.erb
+    :cursor_offset: 6613
+    :timestamp: 2012-08-01 21:31:40.899000 +12:00
   - :path: app/views/pages/_signup.html.erb
-    :cursor_offset: 1498
-    :timestamp: 2012-07-20 17:22:32.203000 +12:00
-    :selection_offset: 1519
+    :cursor_offset: 6059
+    :timestamp: 2012-08-01 21:31:01.908000 +12:00
+  - :path: app/views/pages/_hand.html.erb
+    :cursor_offset: 5518
+    :timestamp: 2012-08-01 21:33:24.581000 +12:00
+  - :path: app/views/pages/_card.html.erb
+    :cursor_offset: 6603
+    :timestamp: 2012-08-01 21:32:02.566000 +12:00
+    :selection_offset: 6619
+    :block_selection_mode: false
+  - :path: app/views/pages/_setup.html.erb
+    :cursor_offset: 4453
+    :timestamp: 2012-08-01 21:37:51.230000 +12:00
+  - :path: app/views/pages/_game2.html.erb
+    :cursor_offset: 0
+    :timestamp: 2012-08-02 09:57:07.242000 +12:00
+    :selection_offset: 32
     :block_selection_mode: false
   - :path: app/controllers/pages_controller.rb
     :cursor_offset: 48
     :timestamp: 2012-07-23 12:56:15.075000 +12:00
-  - :path: app/views/pages/_hand.html.erb
-    :cursor_offset: 2931
-    :timestamp: 2012-07-31 12:19:03.884000 +12:00
-  - :path: app/views/pages/_user.html.erb
-    :cursor_offset: 8839
-    :timestamp: 2012-08-01 11:48:01.204000 +12:00
-  - :path: app/views/pages/_card.html.erb
-    :cursor_offset: 9485
-    :timestamp: 2012-07-26 22:38:04.187000 +12:00
-  - :path: app/views/pages/_game.html.erb
-    :cursor_offset: 2447
-    :timestamp: 2012-07-31 21:57:21.225000 +12:00
-  - :path: app/views/pages/_login.html.erb
-    :cursor_offset: 1600
-    :timestamp: 2012-08-01 11:54:33.204000 +12:00
-  - :path: app/views/pages/showpage.js.erb
-    :cursor_offset: 0
-    :timestamp: 2012-07-23 12:51:35 +12:00
   - :path: app/views/pages/home.html.erb
-    :cursor_offset: 346
-    :timestamp: 2012-07-19 16:28:43.159000 +12:00
-  - :path: app/views/layouts/_navbar.html.erb
-    :cursor_offset: 1668
-    :timestamp: 2012-08-01 14:07:12.105000 +12:00
+    :cursor_offset: 2658
+    :timestamp: 2012-08-01 21:29:03.525000 +12:00
+    :selection_offset: 2816
+    :block_selection_mode: false
+  - :path: app/views/pages/_css.html.erb
+    :cursor_offset: 269
+    :timestamp: 2012-08-01 21:39:04.182000 +12:00
   - :path: config/routes.rb
     :cursor_offset: 89
     :timestamp: 2012-07-23 12:56:25.636000 +12:00
+  - :path: app/views/layouts/_navbar.html.erb
+    :cursor_offset: 1820
+    :timestamp: 2012-08-02 15:23:10.401000 +12:00
 files_to_retain: 0

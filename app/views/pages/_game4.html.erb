@@ -1,0 +1,46 @@
+<h2>Game controller 'Double' and private actions</h2>
+<p>
+  Well now for our double action, for those of your no to familiar with the rules of blackjack
+  after the deal you have a one off option to double your bet and take your luck by drawing one single card instead 
+  of using the hit option where you can draw mutliply times.
+</p>
+<p>
+  So lets take a look at how the code for the double action for the game controller will look:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">def</span> <span class="br">double</span>
+    <span class="g">if</span> got_the_dollars?
+      deduction
+      session[<span class="r">:bet</span>] <span class="g">=</span> session[<span class="r">:bet</span>].to_f <span class="g">*</span> <span class="g">2</span>
+      next_card
+      check_if_bust
+      <span class="g">if</span> session[<span class="r">:gamestate</span>] <span class="g">!=</span> <span class="gr">"Over"</span>
+        dealer_ftw
+        find_winner
+      <span class="g">end</span>
+      session[<span class="r">:bet</span>] <span class="g">=</span> session[<span class="r">:bet</span>].to_f <span class="g">/</span> <span class="g">2</span>
+    <span class="g">else</span>
+      flash.now[<span class="r">:error</span>] <span class="g">=</span> <span class="gr">"You're Broke Fool"</span>
+    <span class="g">end</span>
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  So much like the deal action our double action begins with the check that the player has enough money to double thier bet using the got the dollars action.
+  The next step is the deduction from the players bankroll using the deduction action. We then reset the session bet variable to relect the doubling of the bet by simple multiplying it by two.
+  Next the action fires off the next card action topping the hand upto three cards.
+  Now that we have doubled the bet and dealt the third card we have to check if the player has gone bust before moving on of course using our exsisting check if bust action.
+  With our check if bust action run through we check if the gamestate was changed to "Over", if gamestate does not equal over we call a new private action
+  called dealer_ftw which we will look at now:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">def</span> <span class="br">dealer_ftw</span>
+     dhand <span class="g">=</span> session[<span class="r">:dealer_hand</span>]
+     dhand.cards <span class="g"><<</span> <span class="p">Card</span>.<span class="g">new</span> while(<span class="p">Hand</span>.score_of(<span class="b">dhand</span>) <span class="g"></span> <span class="g">17</span>)
+     dhand.score <span class="g">=</span> <span class="p">Hand</span>.score_of(<span class="b">dhand</span>)
+     session[<span class="r">:dealer_hand</span>] <span class="g">=</span> dhand
+  <span class="g">end</span>
+</pre>
+</div>

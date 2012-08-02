@@ -1,0 +1,68 @@
+<h2>Game controller 'Hit' and private actions</h2>
+<p>
+  So we now move onto the hit action in the game controller this is called by the button that funnily enough 
+  is called hit and adds another card to the players hand. Lets look at the action itself:
+</p>
+<div id="cmd" class="span9">
+<pre>
+ <span class="g">def</span> <span class="g">hit</span>
+    next_card
+    session[<span class="g">:gamestate</span>] <span class="g">=</span> <span class="gr">"Third"</span>
+    check_if_bust
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  A fairly short looking action the hit action starts by calling a private action next_card which is used in the double
+  funnily enough adds a new card to the players hand like so:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">def</span> <span class="br">next_card</span>
+    hand = session[<span class="r">:player_hand</span>]
+    <span class="b">@card</span> = <span class="p">Card</span>.<span class="g">new</span>
+    hand.cards <span class="g"><<</span> <span class="b">@card</span>
+    hand.score = <span class="p">Hand</span>.score_of(<span class="b">hand</span>)
+    session[<span class="r">:player_hand</span>] = hand
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  This next card action is wont need much explaining as it is not that different than the first part of
+  our deal action although this time we only add one new card into the hands cards array.
+  Your hit actions next step changes the gamestate to "Third" which as we know from coding our buttons
+  partial disables the display of the double button. Finally the hit action has to calculate if the 
+  player has gone bust, to achieve this we will once again code a private action check_if_bust:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">def</span> <span class="br">check_if_bust</span>
+    <span class="g">if</span> (session[<span class="r">:player_hand</span>].score <span class="g">></span> <span class="r">21</span>)
+    flash.now[<span class="r">:error</span>] =</span> <span class="gr">"You Have Gone Bust"</span>
+    session[<span class="r">:gamestate</span>] =</span> <span class="gr">"Over"</span>
+    <span class="g">end</span>
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  So as you can see the chec if bust action simple checks if the session variable players hands score is greater
+  than 21, If it is we set a flash to inform the player and change gamestate to "Over" so that the deal button 
+  will be present to start a new hand.
+</p>
+<p>
+  Like the deal action we need a javascript file to be fired off when the hit action is called so go ahead and create
+  you hit.js.erb file in your views/games directory and populate it to update the following divs with our partials like so:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">$</span>(<span class="gr">"#player"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "players_cards") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#buttons"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "buttons") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#result"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "results") ) %>"</span>);
+
+</pre>
+</div>
+<p>
+  And thats our hit action done and dusted, we can now move on to our double action.
+</p><br>
+<center><%= link_to image_tag("next.png"), { :controller => 'pages', :action => 'showpage', :title => 'game4' }, :remote => true, :method => :post %></center>
+
