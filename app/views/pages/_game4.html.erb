@@ -44,3 +44,65 @@
   <span class="g">end</span>
 </pre>
 </div>
+<p>
+  Well the dealer for the win action is kind of like our next card action but because its an AI player
+  we need to program some logic for the action to follow in order to work out when to draw more cards. This logic
+  is coded in the form of a while loop with the condition of the dealers hand having a score 16 or less, so as long as the dealers
+  score is less than 16 the loop will add another card to the card array. We then return the final version of the dealers hand.
+</p>
+<p>
+  With the players hand complete and now the dealers hand complete we can call the final private action to find the
+  winner of the hand. This action is the find_winner action and looks like this:
+</p>
+<div id="cmd" class="span9">
+<pre>
+   <span class="g">def</span> <span class="br">find_winner</span>
+    score <span class="g">=</span> session[<span class="r">:player_hand</span>].score
+    d_score <span class="g">=</span> session[<span class="r">:dealer_hand</span>].score
+    bet <span class="g">=</span> session[<span class="r">:bet</span>].to_f
+    <span class="g">if</span> (score <span class="g">==</span> d_score)
+      flash.now[<span class="r">:success</span>]  <span class="g">=</span> <span class="gr">"Push"</span>
+      dollars <span class="g">+=</span> bet
+    <span class="g">elsif</span> (d_score <span class="g">></span> <span class="r">21</span> <span class="g">or</span> (score <span class="g">></span> d_score))
+      flash.now[<span class="r">:success</span>]  <span class="g">=</span> <span class="gr">"You Win!"</span>
+      dollars <span class="g">+=</span> (bet <span class="g">*</span> <span class="r">2</span>)
+    <span class="g">else</span>
+      flash.now[<span class="r">:error</span>] <span class="g">=</span> <span class="gr">"Dealer Wins"</span>
+    <span class="g">end</span>
+    session[<span class="r">:gamestate</span>] <span class="g">=</span> <span class="gr">"Over"</span>
+    session[<span class="r">:user</span>].bankroll <span class="g">=</span> dollars
+    session[<span class="r">:user</span>].save
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  Right lets take a look at this find a winner beast. Firstly we set a few variables to use within the action, we set a variable for each hands score (player and dealer)
+  and set two float variables for the bet and the bankroll. We now use a if statement to calculate which of the three possible outcomes has occured. 
+</p>
+<ul>
+  <li>The first possible outcome we test for is the push which is when the scores are even, in the case of a push we code a simple return on the bet amount by adding it to the players bankroll.</li>
+  <li>The second possible outcome we test for is the dealer going bust or the players score being higher then the dealers score which both result in the player winning, resulting in the bankroll being credited the bet times two.</li>
+  <li>The last possible outcome is the only other possibilty that the player has been beaten by the dealer resulting in no payout.</li>
+</ul>
+<p>
+  All three of these tests set a relevant flash message. With the result of the hand determined we now set the gamestate to "Over" and
+  update the session user variable bankroll attribute before saving the changes to the server.
+</p>
+<p>
+  Back to the double action now, with the double action basically finished we now simple set the session bet variable back to one hundred so that all future hand are not calculated at two hundred dollars we could 
+  have simple coded the session bet variable to be set to one hundred everytime the deal action is triggered but you may wish to take this app abit further and add some buttons to change the amount bet each hand.
+  Dont forget that its all good to code the action but without our javascript file nothing will be updated and infact we get an error so heres the double.js.erb file:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">$</span>(<span class="gr">"#dealer"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "dealers_cards") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#result"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "results") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#buttons"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "buttons") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#player"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "players_cards") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#spacer"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "player") ) %>"</span>);
+</pre>
+</div>
+<p>
+  Well thats the double action all pounded out  and we only have one action left so lets get into it.
+</p>
+<center><%= link_to image_tag("next.png"), { :controller => 'pages', :action => 'showpage', :title => 'game5' }, :remote => true, :method => :post %></center>

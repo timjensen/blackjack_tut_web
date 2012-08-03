@@ -20,11 +20,13 @@
 <div id="cmd" class="span9">
 <pre>
   <span class="g">class</span> <span class="br">Card</span>
+  <span class="g">attr_reader</span> <span class="r">:card_front</span>
   
   <span class="g">end</span>
 </pre>
 </div>
 <p>
+  Here we have added the attribute reader for the card_frontso that it can be read by by external sources but not altered.
   Ok the first part of the card class we will define will be a deck of cards to do this we will create a class variable 
   by using the double at signs '@@' and give it the the value of an array of cards, to set this array we use the w%() method which if you 
   havn't come across this yet tells ruby to break up a string into words, based on whitespace and return an array of those words. For instance %w(hello how are you)
@@ -56,7 +58,7 @@
 <p>
   Next we will code the initialize function which is fired off when we ask for a new card.  This creates a new instance variable which we have called @card_front which selects
   the next card in the deck using the already setup class variables, we grab the card in the @@deck array where the index is @@pos.
-  Then updates the @poss class variable to increase by 1 keeping a record of where to draw the next card from in the deck array:
+  Then updates the @@poss class variable to increase by 1 keeping a record of where to draw the next card from in the deck array:
 </p>
 <div id="cmd" class="span9">
 <pre>

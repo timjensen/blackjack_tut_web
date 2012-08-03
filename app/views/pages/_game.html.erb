@@ -31,7 +31,8 @@
 <div id="cmd" class="span9">
 <pre>
   <span class="br">&lt;div id=</span><span class="gr">"mainbox"</span><span class="br">></span>
-    <span class="br">&lt;div id=</span><span class="gr">"dealer"</span><span class="br">></span>
+  <span class="br">&lt;div id="spacer"></span>&lt;%= <span class="g">render</span> <span class="gr">'player'</span>%><span class="br">&lt;/div></span>  
+  <span class="br">&lt;div id=</span><span class="gr">"dealer"</span><span class="br">></span>
       <span class="br">&lt;div id=</span><span class="gr">"dscore"</span><span class="br">></span> <span class="br">&lt;/div></span>
          &lt;%= image_tag <span class="gr">"cards/back.png"</span>  %>&nbsp
          &lt;%= image_tag <span class="gr">"cards/back.png"</span>  %>
@@ -49,7 +50,14 @@
 </pre>
 </div>
 <p>
-  So we have a standard html styled layout with a div to contain the game area, a div to contain the dealers cards and score, a div to contain 
+  So we have a standard html styled layout with a div to contain the game area,the first div inside this is a div populated by a partial that contains the current players name and bankroll which we will look at quickly now, this is the _player.html.erb file in your 
+  views/games directory :
+<div id="cmd" class="span9">
+<pre>
+<span class="br">&lt;h1></span>Player:&lt;%= session[<span class="r">:user</span>].name %> | Bankroll:&lt;%= session[<span class="r">:user</span>].bankroll %><span class="br">&lt;/h1></span>
+</pre>
+</div>
+  The rest of the html layout contains a div to contain the dealers cards and score, a div to contain 
   a result message, a div to contain the current players cards and score and a div to contain the game buttons. This is the default display and each div will be updated 
   using ajax as required. The only div that needs further explaining at this stage is the button div as I dont believe Hartl's tutorial covered rails
   button_to syntax. So we begin by entering the text value of the button in quotation marks, we then pass in a block containing the controller and action

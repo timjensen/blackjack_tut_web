@@ -22,6 +22,7 @@
   <ul>
     <li>rspec-rails - Which we will be using for our testing.</li>
     <li>capybara - which allows us to simulate user interactions using english styled syntax while testing.</li>
+    <li>factory_girl_rails -  which is an awesome tool we will use to create users for testing. </li>
     <li>bcrypt-ruby - nice little gem to take care of password encryption (slightly overkill for this app but hey).</li>
     <li>bootstrap-sass - which makes for super easy stylish looking CSS. </li>
     <li>pg - which we use in production because heroku uses PostgreSQL. </li>
@@ -50,6 +51,7 @@ end</span>
 
 <span>group</span> <span class="b">:test</span> do</span>
   <span>gem</span> <span class="r">'capybara'</span><span>,</span> <span class="r">'1.1.2'</span>
+  gem <span class="r">'factory_girl_rails'</span>, <span class="r">'1.4.0'</span>
 <span>end</span>
 
 <span>group</span> <span class="b">:production</span> <span class="g">do</span>

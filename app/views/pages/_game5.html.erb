@@ -1,0 +1,36 @@
+<h2>Game controller 'Stay' and private actions</h2>
+<p>
+  Well the stay action is incredibale short and the aspects of it have been covered when we coded 
+  our double the benfit of focus on 'DRY' coding aye guys. But here is the the stay action:
+</p>
+<div id="cmd" class="span9">
+<pre>
+  <span class="g">def</span> <span class="br">stay</span>
+    dealer_ftw
+    find_winner
+  <span class="g">end</span>
+</pre>
+</div>
+<p>
+  So as you can see the stay action simply uses our dealer ftw action to plout the dealers hand and then uses the 
+  find winner action to funnily enough find the winner...
+  Like the other actions we will need a javascript file to update our divs with our partials so here it is:
+</p>
+<div id="cmd" class="span9">
+<pre>
+<span class="g">$</span>(<span class="gr">"#dealer"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "dealers_cards") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#result"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "results") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#buttons"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "buttons") ) %>"</span>);
+<span class="g">$</span>(<span class="gr">"#spacer"</span>).html(<span class="gr">"&lt;%= escape_javascript( render(:partial => "player") ) %>"</span>);
+</pre>
+</div>
+<p>
+  And thats our Blackjack app all up and running!!
+</p>
+<p>
+  The full source code for this tutorial can be found at  <%= link_to "here", "https://github.com/timjensen/blackjacktut" , :target => '_blank' %>.
+</p>
+<p>
+  If you have problems getting your app up and running and want to trouble shoot it send me a email at timdavidjensen@gmail.com
+  with a discription of the issue and a link to your github repo so I can check it and get back to you.
+</p>

@@ -12,10 +12,13 @@
 </div>
 <p>
   Now the hand class only contains two methods which we will look at now. The first one is the initialization of a new hand. A new hand contains an
-  empty array of cards and a default score of zero we code this as follows:
+  empty array of cards and a default score of zero we also have to add attribute accessor for both variables as they will be accessed and change by our actions, 
+  we code this as follows:
 </p>
 <div id="cmd" class="span9">
 <pre>
+  <span class="g">attr_accessor</span> <span class="r">:cards</span>, <span class="r">:score</span>
+  
   <span class="g">def</span> <span class="br">initialize</span>
     <span class="b">@cards</span><span class="g"> =</span> []
     <span class="b">@score</span> <span class="g">=</span> <span class="r">0</span>
