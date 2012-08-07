@@ -1,8 +1,9 @@
 --- 
 open_files: 
-  - config/routes.rb
-  - app/controllers/pages_controller.rb
-  - app/views/pages/_game.html.erb
-  - app/views/layouts/_navbar.html.erb
+  - app/views/pages/_game5.html.erb
+  - app/views/pages/_setup.html.erb
+  - app/views/pages/_css.html.erb
   - app/views/pages/_hand.html.erb
-  - app/views/pages/_card.html.erb
+  - app/views/pages/_game.html.erb
+  - app/views/pages/_game4.html.erb
+  - README.rdoc

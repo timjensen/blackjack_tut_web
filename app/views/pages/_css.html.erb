@@ -1,6 +1,120 @@
 <h2>Here is the CSS and Images you will need for the application</h2>
-<p>This will contain the final css file for copy and paste not gona 
-  explain css to people who have been studyn web development for 2-3 years....
+<p>For your app your going to need a few images basically a deck of cards and a table, to download this
+  images click <%= link_to "here", "https://s3-ap-southeast-1.amazonaws.com/bjtut/blackjack_imgs.7z" %>. Then simply unzip the file and lace the contents in your app/assets/images directory.
 </p>
+<p>
+  That done here is the CSS I used in the source code so just copy and paste it into your CSS file.Im not
+  going to explain it all as it is simple CSS and you guys have down this over and over during the last
+  few years.
+</p>
+<pre>
+@import "bootstrap";
+
+@mixin box_sizing {
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+  box-sizing: border-box;
+}
+#login_form {
+  width: 650px;
+  margin: auto;
+}
+html {
+  overflow-y: scroll;
+}
+
+body {
+  padding-top: 60px;
+}
+
+section {
+  overflow: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.center {
+  text-align: center;
+}
+
+.center h1 {
+  margin-bottom: 10px;
+}
+input, textarea, select, .uneditable-input {
+  border: 1px solid #bbb;
+  width: 100%;
+  padding: 10px;
+  height: auto;
+  margin-bottom: 15px;
+  @include box_sizing;
+}
+#error_explanation {
+  color:#f00;
+  ul {
+    list-style: none;
+    margin: 0 0 18px 0;
+  }
+}
+
+.field_with_errors {
+  @extend .control-group;
+  @extend .error;
+ }
+
+#mainbox {
+  width: 600px;
+  height: 500px;
+  margin: auto;
+  text-align: center;
+  background-image: url(/assets/test.png);
+}
+#result {
+  width: 400px;
+  min-height: 51px;
+  margin: auto;
+  text-align: center;
+}
+#player {
+  padding: 50px 0px 0px 0px;
+  width: 400px;
+  height: 120px;
+  margin: auto;
+  text-align: center;
+  color: yellow;
+}
+#player label {
+  color: #FFC90E;
+}
+#spacer {
+  min-height: 40px ;
+}
+#spacer h1 {
+  color: #FFC90E;
+}
+#dealer {
+  width: 400px;
+  height: 150px;
+  margin: auto;
+  text-align: center;
+}
+#dscore {
+  min-height: 27px;
+}
+#dscore label {
+  color: #FFC90E;
+}
+#buttons {
+  padding: 10px 0px 0px 0px;
+  width: 400px;
+  height: 80px;
+  margin: auto;
+  text-align: center;
+}
+</pre>
 </br>
+<p>
+  Well theres the freebees now lets get into some coding.
+</p>
 <center><%= link_to image_tag("next.png"), { :controller => 'pages', :action => 'showpage', :title => 'user' }, :remote => true, :method => :post %></center>

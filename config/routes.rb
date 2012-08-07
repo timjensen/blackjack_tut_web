@@ -4,6 +4,7 @@ BlackWeb::Application.routes.draw do
   
   resources :pages
   post 'pages/showpage'
+  post 'pages/down'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

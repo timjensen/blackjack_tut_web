@@ -1,8 +1,9 @@
-1343963966
+1344314175
 Application	C:/Sites/BlackWeb/config/application.rb	  class Application 
 ApplicationController	C:/Sites/BlackWeb/app/controllers/application_controller.rb	class ApplicationController 
 ApplicationHelper	C:/Sites/BlackWeb/app/helpers/application_helper.rb	module ApplicationHelper
 BlackWeb	C:/Sites/BlackWeb/config/application.rb	module BlackWeb
 PagesController	C:/Sites/BlackWeb/app/controllers/pages_controller.rb	class PagesController 
 PagesHelper	C:/Sites/BlackWeb/app/helpers/pages_helper.rb	module PagesHelper
+down	C:/Sites/BlackWeb/app/controllers/pages_controller.rb	  def down
 showpage	C:/Sites/BlackWeb/app/controllers/pages_controller.rb	  def showpage
